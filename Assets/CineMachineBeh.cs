@@ -8,10 +8,10 @@ using UnityEngine.UI;
 
 public class CineMachineBeh : MonoBehaviour
 {
-    public List<Transform> targetsToFilm = new List<Transform>();
+    private List<Transform> targetsToFilm = new List<Transform>();
     private List<GameObject> machines = new List<GameObject>();
     private List<Transform> initialPoses = new List<Transform>();
-    public List<Transform> points = new List<Transform>();
+    private List<Transform> points = new List<Transform>();
 
     private CinemachineBrain _brain;
     
@@ -21,14 +21,18 @@ public class CineMachineBeh : MonoBehaviour
     public Button downBtn;
 
     private LookAround lookAround;
+    private FloorsParser floorsParser;
     
 
     private void Awake()
     {
-        _brain = Camera.main.GetComponent<CinemachineBrain>();
         lookAround = FindObjectOfType<LookAround>();
+        floorsParser = FindObjectOfType<FloorsParser>();
+        _brain = Camera.main.GetComponent<CinemachineBrain>();
+       
         for (int i = 0; i < transform.childCount; i++)
         {
+            points.Add(transform.GetChild(i).transform);
             machines.Add(transform.GetChild(i).gameObject);
             initialPoses.Add(transform.GetChild(i).transform);
         }
@@ -36,6 +40,7 @@ public class CineMachineBeh : MonoBehaviour
 
     void Start()
     {
+        targetsToFilm = floorsParser.floors;
         SetCamera();
     }
     

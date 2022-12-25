@@ -6,10 +6,9 @@ using UnityEngine;
 
 public class LookAround : MonoBehaviour
 {
-    [SerializeField] private Camera cam;
-    [SerializeField] internal Transform target;
-    [SerializeField] internal Transform point;
-    [SerializeField] private float distanceToTarget = 10;
+    private Camera cam;
+    internal Transform target; 
+    internal Transform point;
 
     [SerializeField] [Range(0, 360)] private int maxRotationInOneSwipe = 180;
 
@@ -21,6 +20,7 @@ public class LookAround : MonoBehaviour
 
     private void Start()
     {
+        cam = Camera.main;
         _brain = cam.GetComponent<CinemachineBrain>();
     }
 
