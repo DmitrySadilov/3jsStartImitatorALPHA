@@ -8,9 +8,10 @@ using UnityEngine.UI;
 
 public class CineMachineBeh : MonoBehaviour
 {
-    private List<Transform> targetsToFilm = new List<Transform>();
-    private List<GameObject> machines = new List<GameObject>();
-    private List<Transform> initialPoses = new List<Transform>();
+    internal List<Transform> targetsToFilm = new List<Transform>();
+    public List<GameObject> machines = new List<GameObject>();
+    public List<Vector3> initialVectors = new List<Vector3>();
+    public List<Quaternion> initialQuaternions = new List<Quaternion>();
     private List<Transform> points = new List<Transform>();
 
     private CinemachineBrain _brain;
@@ -34,13 +35,15 @@ public class CineMachineBeh : MonoBehaviour
         {
             points.Add(transform.GetChild(i).transform);
             machines.Add(transform.GetChild(i).gameObject);
-            initialPoses.Add(transform.GetChild(i).transform);
+            initialVectors.Add(transform.GetChild(i).position);
+            initialQuaternions.Add(transform.GetChild(i).rotation);
         }
     }
 
     void Start()
     {
         targetsToFilm = floorsParser.floors;
+        FindIntitialVector();
         SetCamera();
     }
     
@@ -62,18 +65,19 @@ public class CineMachineBeh : MonoBehaviour
 
     public void NextEntry()
     {
+      
         StartCoroutine(Transit(index));
         _brain.enabled = true;
-        OffCamera();
         index++;
         SetCamera();
     }
 
     public void PrevEntry()
     {
+        
         StartCoroutine(Transit(index));
+        
         _brain.enabled = true;
-        OffCamera();
         index--;
         SetCamera();
     }
@@ -87,18 +91,24 @@ public class CineMachineBeh : MonoBehaviour
 
     private void OffCamera()
     {
-        //machines[index].SetActive(false);
-        machines[index].transform.position = initialPoses[index].transform.position;
-        machines[index].transform.rotation = initialPoses[index].transform.rotation;
+        machines[index].transform.position = initialVectors[index];
+        machines[index].transform.rotation = initialQuaternions[index];
     }
 
     private IEnumerator Transit(int ind)
     {
+        OffCamera();
         lookAround.canLook = false;
-        //lookAround.enabled = false;
         yield return new WaitForSeconds(_brain.m_DefaultBlend.m_Time);
+       
+        FindIntitialVector();
         machines[ind].SetActive(false);
-        //lookAround.enabled = true;
         lookAround.canLook = true;
+    }
+
+    private void FindIntitialVector()
+    {
+        lookAround.directionInitial = lookAround.cam.transform.position - targetsToFilm[index].transform.position;
+        lookAround.directionInitial = lookAround.directionInitial.normalized;
     }
 }

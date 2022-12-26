@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 186465096}
   - component: {fileID: 186465097}
   - component: {fileID: 186465098}
+  - component: {fileID: 186465099}
   m_Layer: 0
   m_Name: CinemaLogic
   m_TagString: Untagged
@@ -268,6 +269,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af0aa000360d7e45af43336468ca90e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  machines: []
+  initialVectors: []
+  initialQuaternions: []
   index: 0
   upBtn: {fileID: 1138606797}
   downBtn: {fileID: 1820749061}
@@ -285,12 +289,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationInOneSwipe: 180
   canLook: 1
-  xFirstBound: 0
-  xSecondBound: 45
-  yFirstBound: -60
-  ySecondBound: -150
-  zFirstBound: 0
-  zSecondBound: 0
+  mutateSpeed: 0
+  bias: 0.75
+  power: 0.75
+--- !u!114 &186465099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186465095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6255dcb1566a08c46aebb59624234d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &379805234
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class LookAround : MonoBehaviour
 {
-    private Camera cam;
+    internal Camera cam;
     internal Transform target; 
     internal Transform point;
 
-    [SerializeField] [Range(0, 360)] private int maxRotationInOneSwipe = 180;
+    [SerializeField]  private float maxRotationInOneSwipe = 180f;
 
     private CinemachineBrain _brain;
 
@@ -20,22 +20,30 @@ public class LookAround : MonoBehaviour
 
     private CineMachineBeh _cineMachineBeh;
 
-    public float minXeulerAngle;
-    public float maxXeulerAngle;
-    public float minYeulerAngle;
-    public float maxYeulerAngle;
+    [Header("FOV Settings")]
+    [SerializeField] float mutateSpeed;
+    [SerializeField] float bias;
+    [SerializeField] float power;
+    internal Vector3 directionInitial;
 
 
-    private void Start()
+    private void Awake()
     {
         _cineMachineBeh = FindObjectOfType<CineMachineBeh>();
         cam = Camera.main;
         _brain = cam.GetComponent<CinemachineBrain>();
     }
+    private void Start()
+    {
+
+        
+
+    }
 
     void Update()
     {
-        Debug.Log(cam.transform.rotation.eulerAngles.y);
+        Debug.LogWarning(directionInitial);
+        Debug.Log(cam.transform.forward);
         if (canLook)
         {
             if (Input.GetMouseButtonDown(0))
@@ -44,37 +52,7 @@ public class LookAround : MonoBehaviour
             }
             else if (Input.GetMouseButton(0))
             {
-                if (Mathf.Clamp(cam.transform.rotation.eulerAngles.x, 5f, 60f) == cam.transform.rotation.eulerAngles.x &&
-                    Mathf.Clamp(cam.transform.rotation.eulerAngles.y, 150f, 355f) == cam.transform.rotation.eulerAngles.y)
-                {
-                    Look();
-                }
-                else
-                {
-                    if (cam.transform.rotation.eulerAngles.x < 5f)
-                    {
-                        cam.transform.rotation = Quaternion.Euler(cam.transform.rotation.eulerAngles.x + 1f, cam.transform.rotation.eulerAngles.y,
-                            cam.transform.rotation.eulerAngles.z);
-                    }
-                    if (cam.transform.rotation.eulerAngles.x > 60f)
-                    {
-                        cam.transform.rotation = Quaternion.Euler(cam.transform.rotation.eulerAngles.x - 1f, cam.transform.rotation.eulerAngles.y,
-                            cam.transform.rotation.eulerAngles.z);
-                    }
-                    if (cam.transform.rotation.eulerAngles.y < 150f)
-                    {
-                        cam.transform.rotation = Quaternion.Euler(cam.transform.rotation.eulerAngles.x , cam.transform.rotation.eulerAngles.y + 1f,
-                            cam.transform.rotation.eulerAngles.z);
-                    }
-                    if (cam.transform.rotation.eulerAngles.x > 355f)
-                    {
-                        cam.transform.rotation = Quaternion.Euler(cam.transform.rotation.eulerAngles.x , cam.transform.rotation.eulerAngles.y - 1f,
-                            cam.transform.rotation.eulerAngles.z);
-                    }
-                    
-
-
-                }
+                Look();
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -88,11 +66,20 @@ public class LookAround : MonoBehaviour
     private void Look()
     {
         _brain.enabled = false;
+        // Vector3 vectorToObject = (currentObj.position - cam.transform.position).normalized;
+        // Debug.LogError(vectorToObject);
+        // Debug.Log(cam.transform.forward);
+        // float dot = Vector3.Dot(cam.transform.forward, vectorToObject) - bias;
+        float dot = Vector3.Dot(-cam.transform.forward, directionInitial) - bias;
+        //Debug.Log(dot);
+        dot = Mathf.Pow(dot, power);
+        mutateSpeed = Mathf.Max(maxRotationInOneSwipe * dot, 0.1f);
+
         Vector3 newPosition = cam.ScreenToViewportPoint(Input.mousePosition);
         Vector3 direction = previousPosition - newPosition;
 
-        float rotationAroundYAxis = -direction.x * maxRotationInOneSwipe;
-        float rotationAroundXAxis = direction.y * maxRotationInOneSwipe;
+        float rotationAroundYAxis = -direction.x * mutateSpeed;
+        float rotationAroundXAxis = direction.y * mutateSpeed;
 
 
 
@@ -116,8 +103,5 @@ public class LookAround : MonoBehaviour
         _brain.enabled = true;
     }
 
-    private void AngleCheck()
-    {
-        
-    }
+   
 }
