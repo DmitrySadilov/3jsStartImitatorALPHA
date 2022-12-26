@@ -268,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af0aa000360d7e45af43336468ca90e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   upBtn: {fileID: 1138606797}
   downBtn: {fileID: 1820749061}
 --- !u!114 &186465098
@@ -284,6 +285,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationInOneSwipe: 180
   canLook: 1
+  xFirstBound: 0
+  xSecondBound: 45
+  yFirstBound: -60
+  ySecondBound: -150
+  zFirstBound: 0
+  zSecondBound: 0
 --- !u!1 &379805234
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,8 +1049,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0.12586164, y: 0.86162066, z: -0.2597598, w: -0.41748494}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000005, y: 1, z: 1.0000004}
+  m_LocalPosition: {x: 3.291, y: 4.531, z: 2.598}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

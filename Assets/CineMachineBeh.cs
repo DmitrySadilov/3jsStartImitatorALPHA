@@ -15,7 +15,7 @@ public class CineMachineBeh : MonoBehaviour
 
     private CinemachineBrain _brain;
     
-    private int index = 0;
+    public int index = 0;
 
     public Button upBtn;
     public Button downBtn;
